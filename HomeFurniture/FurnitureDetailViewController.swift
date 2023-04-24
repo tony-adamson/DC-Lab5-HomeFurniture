@@ -83,7 +83,13 @@ class FurnitureDetailViewController: UIViewController, UIImagePickerControllerDe
     }
     
     @IBAction func actionButtonTapped(_ sender: Any) {
+        //Из метода actionButtonTapped(_:) используйте UIActivityViewController, чтобы добавить возможность обмена изображением и описанием элемента мебели Furniture.
+        //From the actionButtonTapped(_:) method, use the UIActivityViewController to add the ability to share the image and description from the Furniture item.
+        guard let image = photoImageView.image, let description = furnitureDescriptionLabel.text else { return }
         
+        let activityController = UIActivityViewController(activityItems: [image, description], applicationActivities: nil)
+        
+        present(activityController, animated: true)
     }
     
 }
