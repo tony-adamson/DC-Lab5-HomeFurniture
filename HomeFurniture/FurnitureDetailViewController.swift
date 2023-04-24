@@ -39,10 +39,26 @@ class FurnitureDetailViewController: UIViewController {
     }
     
     @IBAction func choosePhotoButtonTapped(_ sender: Any) {
-        //В методе choosePhotoButtonTapped(_:) в FurnitureDetailViewController вам нужно создать и представить ваш action sheet. Сначала создайте экземпляр UIAlertController. Вы можете сделать параметры title и message равными nil, но нужно установить preferredStyle равным UIAlertControllerStyle.actionSheet.
-        //Затем создайте UIAlertAction для отмены предупреждения и добавьте ее в ваш экземпляр UIAlertController. Как вы узнали, обработчик выполняет код после того, как кнопка нажата. По умолчанию кнопка, нажатая в UIAlertController, закрывает предупреждение, поэтому параметр handler может быть равен nil.
-        //Далее вам нужно добавить еще два экземпляра UIAlertAction: один для выбора изображения из фотобиблиотеки и другой для использования камеры для создания нового изображения. Используйте функцию автозаполнения в Xcode, чтобы получить правильный синтаксис для включения параметра обработчика в эти действия. Вы можете оставить тела обработчиков пустыми на данный момент, но вам нужно будет вставить код позже, чтобы убедиться, что выбор источника изображения происходит правильно. Обязательно добавьте эти действия в ваш контроллер представления предупреждений. В конце метода представьте контроллер представлений предупреждений.
-        //В конце метода необходимо вызвать метод present(_:animated:completion:) на экземпляре UIAlertController, чтобы представить созданный UIAlertController на экране.
+        
+        //созадем экземпляр класса UIAlertController
+        let alertController = UIAlertController(title: "Choose image source", message: nil, preferredStyle: .actionSheet)
+        
+        //создаем кнопки как экземпляры UIAlertAction, основные с замыканиями
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) { action in
+            print("User choose camera")
+        }
+        let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .default) { action in
+            print("User chhose photo library")
+        }
+        
+        //добавляем кнопки в alertController
+        alertController.addAction(cameraAction)
+        alertController.addAction(photoLibraryAction)
+        alertController.addAction(cancelAction)
+        
+        //презентуем пользователю после нажатия кнопки
+        present(alertController, animated: true)
     }
 
     @IBAction func actionButtonTapped(_ sender: Any) {
