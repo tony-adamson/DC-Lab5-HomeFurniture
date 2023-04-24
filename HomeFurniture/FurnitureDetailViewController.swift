@@ -1,7 +1,7 @@
 
 import UIKit
 
-class FurnitureDetailViewController: UIViewController {
+class FurnitureDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var furniture: Furniture?
     
@@ -39,28 +39,49 @@ class FurnitureDetailViewController: UIViewController {
     }
     
     @IBAction func choosePhotoButtonTapped(_ sender: Any) {
+        //создаем экземпляр класса UIImagePickerController и установим его делегатом
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
         
         //созадем экземпляр класса UIAlertController
         let alertController = UIAlertController(title: "Choose image source", message: nil, preferredStyle: .actionSheet)
         
         //создаем кнопки как экземпляры UIAlertAction, основные с замыканиями
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let cameraAction = UIAlertAction(title: "Camera", style: .default) { action in
-            print("User choose camera")
-        }
-        let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .default) { action in
-            print("User chhose photo library")
+        alertController.addAction(cancelAction)
+        
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            let cameraAction = UIAlertAction(title: "Camera", style: .default) { action in
+                imagePicker.sourceType = .camera
+                self.present(imagePicker, animated: true)
+            }
+            alertController.addAction(cameraAction)
         }
         
-        //добавляем кнопки в alertController
-        alertController.addAction(cameraAction)
-        alertController.addAction(photoLibraryAction)
-        alertController.addAction(cancelAction)
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .default) { action in
+                imagePicker.sourceType = .photoLibrary
+                self.present(imagePicker, animated: true)
+            }
+            alertController.addAction(photoLibraryAction)
+        }
         
         //презентуем пользователю после нажатия кнопки
         present(alertController, animated: true)
     }
 
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let selectedImage = info[.originalImage] as? UIImage else { return }
+        
+        furniture?.imageData = selectedImage.jpegData(compressionQuality: 0.9)
+        dismiss(animated: true)
+        updateView()
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true)
+    }
+    
     @IBAction func actionButtonTapped(_ sender: Any) {
         
     }
